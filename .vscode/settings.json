@@ -1,0 +1,24 @@
+{
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "entity.name.function",
+                "settings": {
+                    "foreground": "#85dc1b"
+                }
+            },
+            {
+                "scope": "variable.language",
+                "settings": {
+                    "fontStyle": "italic"
+                }
+            }
+        ]
+    },
+    "workbench.colorCustomizations": {
+        "editor.background": "#212121",
+        "sideBar.background": "#151515",
+        "list.hoverBackground": "#272727",
+        "terminal.background": "#0F0F0F"
+    }
+}
