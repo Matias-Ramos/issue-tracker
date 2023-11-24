@@ -14,5 +14,6 @@ const NewIssue = () => (
     </div>
 )
 
+  
 
 export default NewIssue
