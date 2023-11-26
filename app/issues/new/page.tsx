@@ -13,18 +13,16 @@ import {
     // validation
     schema,
     zodResolver,
-    z,
     // hooks
     useForm,
     useRouter,
     useState,
     // fetch
     postIssue,
+    // interface
+    NewIssueForm,
 } from './imports'
 import "easymde/dist/easymde.min.css";
-
-// interface structure is schema based.
-export type NewIssueForm = z.infer<typeof schema>;
 
 const NewIssue = () => {
 
