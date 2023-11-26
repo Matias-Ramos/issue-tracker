@@ -14,3 +14,5 @@ const IssueStatusBadge = ({ status }: { status: Status}) => (
 )
 
 export default IssueStatusBadge
+
+
