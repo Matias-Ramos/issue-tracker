@@ -1,76 +1,85 @@
 'use client';
 
-import { Button, Callout, TextField } from '@radix-ui/themes'
-import Spinner from '../../components/Spinner';
-import schema from "@/app/validationSchemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { z } from "zod";
-import ErrorMessage from "@/app/components/ErrorMessage";
+import {
+    // radix-ui
+    Button,
+    Callout,
+    TextField,
+    // components
+    Spinner,
+    Controller,
+    ErrorMessage,
+    SimpleMDE,
+    // validation
+    schema,
+    zodResolver,
+    z,
+    // hooks
+    useForm,
+    useRouter,
+    useState,
+    // fetch
+    postIssue,
+} from './imports'
 import "easymde/dist/easymde.min.css";
-import SimpleMDE from "react-simplemde-editor";
 
-
-// generate interface based on the schema.
-type NewIssueForm = z.infer<typeof schema>;
+// interface structure is schema based.
+export type NewIssueForm = z.infer<typeof schema>;
 
 const NewIssue = () => {
+
+    /*********** */
+    // Hooks
     const { register, control, handleSubmit, formState: { errors } } = useForm<NewIssueForm>({
         resolver: zodResolver(schema)
     });
     const router = useRouter();
     const [svError, setError] = useState('')
     const [isSubmitting, setSubmitting] = useState(false);
+    const onSubmit = handleSubmit(async (formData: NewIssueForm) => {
+        try{
+            setSubmitting(true);
+            const response = await postIssue(formData);
+            if (!response.ok) 
+                throw new Error();
+            else 
+                router.push('/issues');
+        } catch(err){
+            setSubmitting(false)
+            setError(err as string);
+        }
+    }
+    )
 
+
+    /*********** */
+    // Rendering
     return (
         <div className='max-w-xl'>
             {
-                svError && (
-                    <Callout.Root color="red" className='mb-2'>
-                        <Callout.Text>{svError}</Callout.Text>
-                    </Callout.Root>)
+            svError && 
+                <Callout.Root color="red" className='mb-2'>
+                    <Callout.Text>{svError}</Callout.Text>
+                </Callout.Root>
             }
-            <form onSubmit={handleSubmit(async (formData) => {
-                try{
-                    const options = {
-                        method: 'POST',
-                        body: JSON.stringify(formData),
-                    };
-                    setSubmitting(true);
-                    const response = await fetch("/api/issues", options);
-                    if (!response.ok) throw new Error();
-                    else
-                        router.push('/issues');
-                } catch(newError){
-                    setError(newError as string);
-                    setSubmitting(false)
-                    alert("An unexpected error occurred.")
-                }
-            }
-            )}>
+            <form onSubmit={onSubmit}>
                 <h1>New issue</h1>
                 <TextField.Root className='my-2'>
                     <TextField.Input placeholder="Title" {...register('title')} />
                 </TextField.Root>
-                {
-                    <ErrorMessage>
-                        {errors.title?.message}
-                    </ErrorMessage>
-                }
+                {<ErrorMessage>
+                    {errors.title?.message}
+                </ErrorMessage>}
                 <Controller
-                name="description"
-                control={control}
-                render={({ field }) => (
+                 name="description"
+                 control={control}
+                 render={({ field }) => (
                     <SimpleMDE placeholder="Description" {...field} />
                 )}
                 />
-                {
-                    <ErrorMessage>
-                        {errors.description?.message}
-                    </ErrorMessage>
-                }
+                {<ErrorMessage>
+                    {errors.description?.message}
+                </ErrorMessage>}
                 <Button disabled={isSubmitting}>
                     Submit
                     {isSubmitting && <Spinner />}
