@@ -20,7 +20,7 @@ import {
     // fetch
     postIssue,
     // interface
-    NewIssueForm,
+    IssueInterface,
 } from './imports'
 import "easymde/dist/easymde.min.css";
 
@@ -28,13 +28,13 @@ const NewIssue = () => {
 
     /*********** */
     // Hooks
-    const { register, control, handleSubmit, formState: { errors } } = useForm<NewIssueForm>({
+    const { register, control, handleSubmit, formState: { errors } } = useForm<IssueInterface>({
         resolver: zodResolver(schema)
     });
     const router = useRouter();
     const [svError, setError] = useState('')
     const [isSubmitting, setSubmitting] = useState(false);
-    const onSubmit = handleSubmit(async (formData: NewIssueForm) => {
+    const onSubmit = handleSubmit(async (formData: IssueInterface) => {
         try{
             setSubmitting(true);
             const response = await postIssue(formData);
@@ -48,7 +48,6 @@ const NewIssue = () => {
         }
     }
     )
-
 
     /*********** */
     // Rendering
