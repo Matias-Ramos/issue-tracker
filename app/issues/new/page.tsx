@@ -9,7 +9,6 @@ import {
     Spinner,
     Controller,
     ErrorMessage,
-    SimpleMDE,
     // validation
     schema,
     zodResolver,
@@ -19,6 +18,7 @@ import {
     useState,
     // fetch
     postIssue,
+    dynamic,
     // interface
     IssueInterface,
 } from './imports'
@@ -49,6 +49,10 @@ const NewIssue = () => {
     }
     )
 
+    const SimpleMDE = dynamic(
+        () => import('react-simplemde-editor'),
+        { ssr: false}
+    )
     /*********** */
     // Rendering
     return (
