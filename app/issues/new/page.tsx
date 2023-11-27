@@ -1,28 +1,28 @@
 'use client';
 
+import "easymde/dist/easymde.min.css";
 import {
     // radix-ui
     Button,
     Callout,
-    TextField,
-    // components
-    Spinner,
     Controller,
     ErrorMessage,
+    // interface
+    IssueInterface,
+    // components
+    Spinner,
+    TextField,
+    dynamic,
+    // fetch
+    postIssue,
     // validation
     schema,
-    zodResolver,
     // hooks
     useForm,
     useRouter,
     useState,
-    // fetch
-    postIssue,
-    dynamic,
-    // interface
-    IssueInterface,
-} from './imports'
-import "easymde/dist/easymde.min.css";
+    zodResolver,
+} from './imports';
 
 const NewIssue = () => {
 
