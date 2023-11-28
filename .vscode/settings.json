@@ -20,5 +20,6 @@
         "sideBar.background": "#151515",
         "list.hoverBackground": "#272727",
         "terminal.background": "#0F0F0F"
-    }
+    },
+    "reactSnippets.settings.importReactOnTop": false
 }
