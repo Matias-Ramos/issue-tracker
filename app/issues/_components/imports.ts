@@ -1,4 +1,3 @@
-export { default as postIssue } from '@/app/api/issues/fetches';
 export { default as ErrorMessage } from "@/app/components/ErrorMessage";
 export { default as schema } from "@/app/validationSchemas";
 export { zodResolver } from "@hookform/resolvers/zod";

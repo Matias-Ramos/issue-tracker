@@ -1,5 +1,7 @@
 'use client';
 
+// Works for both Updating and Posting issues.
+
 import "easymde/dist/easymde.min.css";
 import {
     // radix-ui
@@ -13,8 +15,6 @@ import {
     Spinner,
     TextField,
     dynamic,
-    // fetch
-    postIssue,
     // validation
     schema,
     // hooks
@@ -26,7 +26,7 @@ import {
 } from './imports';
 
 
-const IssueForm = ({issue}: {issue?:Issue}) => {
+const IssueForm = ({ issue }: { issue?: Issue }) => {
 
     /*********** */
     // Hooks
@@ -37,14 +37,24 @@ const IssueForm = ({issue}: {issue?:Issue}) => {
     const [svError, setError] = useState('')
     const [isSubmitting, setSubmitting] = useState(false);
     const onSubmit = handleSubmit(async (formData: IssueInterface) => {
-        try{
+        try {
             setSubmitting(true);
-            const response = await postIssue(formData);
-            if (!response.ok) 
+            let response: Response;
+            if (issue)
+                response = await fetch(`/api/issues/${issue.id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify(formData),
+                })
+            else
+                response = await fetch('/api/issues/', {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                })
+            if (!response.ok)
                 throw new Error();
-            else 
+            else
                 router.push('/issues');
-        } catch(err){
+        } catch (err) {
             setSubmitting(false)
             setError(err as string);
         }
@@ -53,14 +63,14 @@ const IssueForm = ({issue}: {issue?:Issue}) => {
 
     const SimpleMDE = dynamic(
         () => import('react-simplemde-editor'),
-        { ssr: false}
+        { ssr: false }
     )
     /*********** */
     // Rendering
     return (
         <div className='max-w-xl'>
             {
-            svError && 
+                svError &&
                 <Callout.Root color="red" className='mb-2'>
                     <Callout.Text>{svError}</Callout.Text>
                 </Callout.Root>
@@ -74,18 +84,18 @@ const IssueForm = ({issue}: {issue?:Issue}) => {
                     {errors.title?.message}
                 </ErrorMessage>}
                 <Controller
-                 name="description"
-                 control={control}
-                 defaultValue={issue?.description}
-                 render={({ field }) => (
-                    <SimpleMDE placeholder="Description" {...field} />
-                )}
+                    name="description"
+                    control={control}
+                    defaultValue={issue?.description}
+                    render={({ field }) => (
+                        <SimpleMDE placeholder="Description" {...field} />
+                    )}
                 />
                 {<ErrorMessage>
                     {errors.description?.message}
                 </ErrorMessage>}
                 <Button disabled={isSubmitting}>
-                    Submit
+                    {issue ? 'Update issue' : 'Submit New Issue'}{' '}
                     {isSubmitting && <Spinner />}
                 </Button>
             </form>
