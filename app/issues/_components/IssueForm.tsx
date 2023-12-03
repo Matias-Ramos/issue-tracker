@@ -14,7 +14,7 @@ import {
     // components
     Spinner,
     TextField,
-    dynamic,
+    SimpleMDE,
     // validation
     schema,
     // hooks
@@ -62,11 +62,6 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         }
     }
     )
-
-    const SimpleMDE = dynamic(
-        () => import('react-simplemde-editor'),
-        { ssr: false }
-    )
     /*********** */
     // Rendering
     return (
@@ -78,7 +73,6 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
                 </Callout.Root>
             }
             <form onSubmit={onSubmit}>
-                <h1>New issue</h1>
                 <TextField.Root className='my-2'>
                     <TextField.Input defaultValue={issue?.title} placeholder="Title" {...register('title')} />
                 </TextField.Root>
