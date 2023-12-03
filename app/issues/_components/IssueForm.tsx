@@ -52,8 +52,10 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
                 })
             if (!response.ok)
                 throw new Error();
-            else
+            else{
                 router.push('/issues');
+                router.refresh();
+            }
         } catch (err) {
             setSubmitting(false)
             setError(err as string);
@@ -104,3 +106,6 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 }
 
 export default IssueForm
+
+
+
