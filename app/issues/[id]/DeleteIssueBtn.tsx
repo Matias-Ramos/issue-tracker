@@ -19,7 +19,7 @@ const DeleteIssueBtn = ({ issueId }: { issueId: number}) => {
           </AlertDialog.Cancel>
           <AlertDialog.Action>
             <Button color="red" onClick={ async()=> {
-              await fetch(`/api/issues/${issueId}`, {method: 'POST'})
+              await fetch(`/api/issues/${issueId}`, {method: 'DELETE'})
               router.push("/");
               router.refresh();
             }} >Delete issue</Button>
