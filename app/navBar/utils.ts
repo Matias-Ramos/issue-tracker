@@ -4,7 +4,7 @@ import classNames from "classnames";
 // Pages content
 export const pages = [
   { name: "Dashboard", link: "/" },
-  { name: "Issues", link: "/issues" },
+  { name: "Issues", link: "/issues/list" },
 ];
 
 /******** */

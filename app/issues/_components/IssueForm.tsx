@@ -53,7 +53,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             if (!response.ok)
                 throw new Error();
             else{
-                router.push('/issues');
+                router.push('/issues/list');
                 router.refresh();
             }
         } catch (err) {

@@ -8,5 +8,5 @@ export { useState } from 'react';
 export { Controller, useForm } from 'react-hook-form';
 export { default as SimpleMDE } from 'react-simplemde-editor';
 export { default as Spinner } from '../../components/Spinner';
-export type { default as IssueInterface } from '../IssueInterface';
+export type { default as IssueInterface } from '../list/IssueInterface';
 
