@@ -10,7 +10,7 @@ export const pages = [
 /******** */
 // Styling
 export const containerStyle =
-  "flex space-x-6 mb-3 items-center px-4 h-14 border-b-2 border-zinc-200";
+  "mb-3 px-4 py-3 border-b-2 border-zinc-200";
 export const olStyle = "flex space-x-6";
 export const getLinkClasses = (pageLink: string, currentPath: string) => {
   return classNames("text-zinc-500 hover:text-zinc-800 transition-colors", {
