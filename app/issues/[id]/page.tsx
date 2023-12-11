@@ -4,38 +4,42 @@ import { notFound } from "next/navigation";
 import EditIssueBtn from "./EditIssueBtn";
 import IssueDetails from "./IssueDetails";
 import DeleteIssueBtn from "./DeleteIssueBtn";
+import { getServerSession } from "next-auth";
 
 interface Props {
-    params: { id: string };
+  params: { id: string };
 }
 
 const IssueDetailPage = async ({ params }: Props) => {
+  const session = await getServerSession();
 
-    /******************** */
-    // URL param validation
-    const isNumber = /^\d+$/.test(params.id);
-    if(!isNumber) notFound();
-    const issue = await prisma.issue.findUnique({
-        where: { id: parseInt(params.id) }
-    })
-    if (!issue) notFound()
+  /******************** */
+  // URL param validation
+  const isNumber = /^\d+$/.test(params.id);
+  if (!isNumber) notFound();
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+  if (!issue) notFound();
 
+  /******************** */
+  // Rendering
+  return (
+    <Grid columns={{ initial: "1", sm: "5" }} gap="5">
+      <Box className="md:col-span-5">
+        <IssueDetails issue={issue} />
+      </Box>
 
-    /******************** */
-    // Rendering
-    return (
-        <Grid columns={{ initial: "1", sm: "5" }} gap="5">
-            <Box className="md:col-span-5">
-                <IssueDetails issue={issue} />
-            </Box>
-            <Box>
-                <Flex direction="column" gap="4">
-                    <DeleteIssueBtn issueId={issue.id} />
-                    <EditIssueBtn issueId={issue.id} />
-                </Flex>
-            </Box>
-        </Grid>
-    )
-}
+      {session && (
+        <Box>
+          <Flex direction="column" gap="4">
+            <DeleteIssueBtn issueId={issue.id} />
+            <EditIssueBtn issueId={issue.id} />
+          </Flex>
+        </Box>
+      )}
+    </Grid>
+  );
+};
 
-export default IssueDetailPage
+export default IssueDetailPage;
