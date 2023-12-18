@@ -6,7 +6,6 @@ import Link from '../../components/Link';
 
 const IssuesPage = async () => {
   const issues = await prisma.issue.findMany();
-
   return (
     <>
       <IssuesToolbar />

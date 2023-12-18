@@ -25,4 +25,4 @@ const patchIssueSchema = z.object({
     .optional()
     .nullable()
 });
-export default schema;
+export { schema, patchIssueSchema };
