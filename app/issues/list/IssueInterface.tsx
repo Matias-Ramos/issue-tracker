@@ -1,5 +1,5 @@
 import { z } from "zod";
-import schema from "../../validationSchemas";
+import {schema} from "../../validationSchemas";
 
 // interface structure is schema based.
 type IssueInterface = z.infer<typeof schema>;

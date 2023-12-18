@@ -1,5 +1,5 @@
 export { default as ErrorMessage } from "@/app/components/ErrorMessage";
-export { default as schema } from "@/app/validationSchemas";
+export { schema } from "@/app/validationSchemas";
 export { zodResolver } from "@hookform/resolvers/zod";
 export type { Issue } from "@prisma/client";
 export { Button, Callout, TextField } from '@radix-ui/themes';
