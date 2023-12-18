@@ -3,39 +3,36 @@
 import { Issue, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
-import Skeleton from "react-loading-skeleton"
-import 'react-loading-skeleton/dist/skeleton.css'
-import toast, { Toaster } from "react-hot-toast"
+import toast, { Toaster } from "react-hot-toast";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const AsigneeSelect = ({ issue }: {issue: Issue}) => {
 
-  const { data: users, error, isLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: async() => {
-      const fetchedUsers = await fetch("/api/users");
-      const formattedUsers = await fetchedUsers.json() as User[];
-      return formattedUsers;
-    },
-    staleTime: 60*1000, // 60s
-    retry: 3
-  })
+  
+  /********* */
+  // Logic
+  const { data: users, error, isLoading } = useUsers();
+  const assignIssue = async( userId: string ) => {
+    try {
+      await fetch(`/api/issues/${issue.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ assignedToUserId : userId || null })
+      })
+    } catch (error) {
+      toast.error("Changes could not be saved.")
+    }
+  }
+
+  /********* */
+  // Rendering
   if(isLoading) return <Skeleton />;
   if(error) return null;
-  
   return (
     <>
     <Select.Root 
      defaultValue={issue.assignedToUserId || ""}
-     onValueChange={ async( userId ) => {
-      try {
-        await fetch(`/api/issues/${issue.id}`, {
-          method: "PATCH",
-          body: JSON.stringify({ assignedToUserId : userId || null })
-        })
-      } catch (error) {
-        toast.error("Changes could not be saved.")
-      }
-    }}>
+     onValueChange={assignIssue}>
       <Select.Trigger placeholder="Assign..." />
       <Select.Content>
         <Select.Group>
@@ -51,5 +48,16 @@ const AsigneeSelect = ({ issue }: {issue: Issue}) => {
     </>
   );
 };
+
+const useUsers = () => useQuery({
+    queryKey: ["users"],
+    queryFn: async() => {
+      const fetchedUsers = await fetch("/api/users");
+      const formattedUsers = await fetchedUsers.json() as User[];
+      return formattedUsers;
+    },
+    staleTime: 60*1000, // 60s
+    retry: 3
+  })
 
 export default AsigneeSelect;
