@@ -12,6 +12,7 @@ export async function PATCH( request: NextRequest, { params }: { params: { id: s
 
     const body = await request.json();
     const validation = schema.safeParse(body);
+    const { assignedToUserId, title, description } = body;
     
     /***************** */
     // Input validation
@@ -19,6 +20,15 @@ export async function PATCH( request: NextRequest, { params }: { params: { id: s
         return NextResponse.json(
             validation.error.errors,
             { status: 400 });
+    // DB validation
+    if( assignedToUserId ){
+        const user = prisma.user.findUnique({where: {id: assignedToUserId}})
+        if(!user)
+        return NextResponse.json(
+            {error: "Invalid user"},
+            {status: 400}
+        )
+    }
 
     /***************** */
     // Existing issue validation
@@ -35,8 +45,9 @@ export async function PATCH( request: NextRequest, { params }: { params: { id: s
     const updatedIssue = await prisma.issue.update({
         where: { id: issue.id },
         data: {
-            title: body.title,
-            description: body.description
+            title, // title: title
+            description,
+            assignedToUserId
         }
     })
     return NextResponse.json(updatedIssue)
