@@ -5,6 +5,7 @@ import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
+import toast, { Toaster } from "react-hot-toast"
 
 const AsigneeSelect = ({ issue }: {issue: Issue}) => {
 
@@ -22,13 +23,18 @@ const AsigneeSelect = ({ issue }: {issue: Issue}) => {
   if(error) return null;
   
   return (
+    <>
     <Select.Root 
      defaultValue={issue.assignedToUserId || ""}
-     onValueChange={ ( userId ) => {
-      fetch(`/api/issues/${issue.id}`, {
-        method: "PATCH",
-        body: JSON.stringify({ assignedToUserId : userId || null })
-      })
+     onValueChange={ async( userId ) => {
+      try {
+        await fetch(`/api/issues/${issue.id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ assignedToUserId : userId || null })
+        })
+      } catch (error) {
+        toast.error("Changes could not be saved.")
+      }
     }}>
       <Select.Trigger placeholder="Assign..." />
       <Select.Content>
@@ -41,6 +47,8 @@ const AsigneeSelect = ({ issue }: {issue: Issue}) => {
         </Select.Group>
       </Select.Content>
     </Select.Root>
+    <Toaster />
+    </>
   );
 };
 
